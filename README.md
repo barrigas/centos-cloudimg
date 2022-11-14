@@ -42,11 +42,11 @@ $ ansible-playbook 01_guest_install.yml
 
 Open the Virtual Machine Manager (provided by the ```virt-manager``` package) to see the newly deployed Virtual Machine.
 
-![vmm](https://github.com/barrigas/centos_qcow2/blob/main/images/vmm.png)
+![vmm](https://github.com/barrigas/centos-kvm/blob/main/images/vmm.png)
 
 Check the assigned IP address.
 
-![vm-1](https://github.com/barrigas/centos_qcow2/blob/main/images/vm-1.png)
+![vm-1](https://github.com/barrigas/centos-kvm/blob/main/images/vm-1.png)
 
 [Optional] Access the Virtual Machine from your terminal emulator.
 

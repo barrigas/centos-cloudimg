@@ -1,0 +1,22 @@
+---
+
+- name: wait for guest availability
+  shell: virsh domstate {{ guest_name }}
+  register: result
+  until: result is search("running")
+  retries: 3
+  delay: 3
+
+    #- name: get guest mac address
+    #  shell: virsh dumpxml {{ guest_name }} | grep "mac address" | awk -F\' '{ print $2}'
+    #  register: guest_mac_address
+
+    #- set_fact:
+    #    guest_mac_address: "{{ guest_mac_address.stdout }}"
+
+    #- debug: var=guest_mac_address
+    #  run_once: true
+
+    #- name: print guest ip address
+    #  shell: /sbin/arp -an | grep {{ guest_mac_address }}
+    #  register: guest_ip_address

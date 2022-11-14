@@ -1,0 +1,38 @@
+--- 
+
+- name: Create guest directory
+  file:
+    dest: /opt/hv/kvm/{{ guest_name }}
+    state: directory
+  
+- name: Copy guest base image
+  get_url:
+    url: https://cloud.centos.org/centos/{{ vm_base_image_version }}/images/{{ vm_template }}
+    dest: /opt/hv/kvm/{{ guest_name }}/{{ guest_name }}.qcow2
+
+- name: Set root password for guest base image
+  command: virt-customize -a /opt/hv/kvm/{{ guest_name }}/{{ guest_name }}.qcow2 --root-password password:{{ guest_root_password }}
+
+- name: Set guest hostname
+  command: virt-customize -a /opt/hv/kvm/{{ guest_name }}/{{ guest_name }}.qcow2 --hostname {{ guest_name }}
+
+- name: Generate new uuid
+  shell: uuidgen -t
+  register: guest_uuid
+  
+- name: Generate a couple of MAC addresses
+  shell: openssl rand 3 | xxd -p | sed 's/\(..\)/\1:/g; s/:$//'
+  with_sequence: count=2
+  register: guest_mac_list
+  
+- name: Copy guest xml template
+  template:
+    src: template.xml.j2
+    dest: /opt/hv/kvm/{{ guest_name }}/{{ guest_name }}.xml
+
+- name: Create guest host
+  command: virsh define /opt/hv/kvm/{{ guest_name }}/{{ guest_name }}.xml
+
+- name: Start guest host
+  shell: virsh -q start {{ guest_name }}
+  notify: wait for guest availability

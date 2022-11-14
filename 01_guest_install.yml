@@ -1,0 +1,13 @@
+- hosts: localhost
+  connection: local
+  become: true
+  vars:
+    vm_base_image_version: 7
+    vm_template: CentOS-7-x86_64-GenericCloud-2211.qcow2
+    guest_root_password: root
+    guest_name: vm-1
+    guest_ram: 1048576
+    guest_cpus: 1
+    
+  roles:
+   - guest_install

@@ -1,0 +1,9 @@
+---
+
+- name: restart libvirtd
+  service:
+    name: libvirtd
+    state: restarted
+    enabled: true
+  become: true
+  when: not ansible_check_mode
